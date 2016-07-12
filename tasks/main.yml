@@ -1,0 +1,47 @@
+---
+# tasks file for asmodehn.pixiecore-cobbler-nginx
+---
+- name: 'Ensure that the docker daemon is functional'
+  docker_ping:
+  retries: 5
+  delay: 10
+  until: result|success
+
+#- name: Check we are logged into Docker Hub
+#  docker_login:
+#    username: "{{ yujin_dockerhub_user }}"
+#    password: "{{ yujin_dockerhub_password }}"
+#    email: "{{ yujin_dockerhub_email }}"
+
+- name: Ensure docker image has the proper version
+  docker_image:
+    name: danderson/pixiecore
+    tag: latest
+    force: yes
+
+- name: Ensure OS image directory exists
+  file:
+    state: directory
+    path: "{{ image_directory }}"
+
+- name: Retrieving tinycorelinux
+  when: "pxe_distro == 'tinycorelinux'"
+  get_url:
+    url: "http://tinycorelinux.net/6.x/x86/release/distribution_files/{{ item }}"
+    dest: "{{ image_directory }}/{{ item }}"
+  with_items:
+    - vmlinuz64
+    - modules64.gz
+    - core.gz
+    - rootfs.gz
+
+- name: Retrieving mandatory apt packages
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - cobbler
+    - cobbler-web  # this will setup apache website
+    # Option TODO
+    #- uwsgi
+    #- nginx

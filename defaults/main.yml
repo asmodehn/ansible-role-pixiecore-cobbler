@@ -1,0 +1,6 @@
+---
+# defaults file for asmodehn.pixiecore-cobbler-nginx
+pxe_distro: tinycorelinux
+image_directory: ./pxe/tinycorelinux
+
+
