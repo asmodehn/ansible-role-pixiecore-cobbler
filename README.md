@@ -1,5 +1,5 @@
-Pixiecore Cobbler Nginx
-=======================
+Pixiecore Cobbler
+=================
 
 This is:
 

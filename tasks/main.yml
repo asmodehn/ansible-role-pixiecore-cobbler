@@ -42,6 +42,11 @@
   with_items:
     - cobbler
     - cobbler-web  # this will setup apache website
-    # Option TODO
+    # One possible option / ptimization
+    # https://givens.io/2012/12/cobbler-uwsgi-and-nginx/
     #- uwsgi
     #- nginx
+
+- name: Retrieving ubuntu distro
+  shell: "cobbler-ubuntu-import {{ item }}"
+  with_items: "{{ ubuntu_distros }}"
